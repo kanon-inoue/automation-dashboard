@@ -1,0 +1,40 @@
+          +----------------+
+          |   Angular /    |  <-- Frontend
+          |   Postman      |
+          +--------+-------+
+                   |
+                   | HTTP Request (POST /api/tests/run)
+                   v
+          +----------------+
+          |   Controller   |  
+          |  (TestController) |
+          +--------+-------+
+                   |
+                   | Calls Service Layer
+                   v
+          +----------------+
+          |    Service     |
+          |(TestExecutionService)|  logic
+          +--------+-------+
+                   |
+                   | Generates Dummy TestResult
+                   v
+          +----------------+
+          |     Model      |  define data structure
+          |  (TestResult)  |
+          +----------------+
+                   |
+                   | Returns Data
+                   v
+          +----------------+
+          |   Controller   |
+          |   Sends JSON   |
+          +----------------+
+                   |
+                   | HTTP Response
+                   v
+          +----------------+
+          | Angular / Postman |
+          +----------------+
+
+
