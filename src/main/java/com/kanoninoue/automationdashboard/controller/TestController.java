@@ -1,40 +1,38 @@
 package com.kanoninoue.automationdashboard.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kanoninoue.automationdashboard.model.TestResult;
-import com.kanoninoue.automationdashboard.service.TestExecutionService;
-
+import com.kanoninoue.automationdashboard.service.TestResultRepository;
 
 @RestController
 @RequestMapping("/api/tests")
 public class TestController {
-  private final TestExecutionService testService;
+  private final TestResultRepository repository;
 
-  public TestController(TestExecutionService testService) {
-    this.testService = testService;
+  public TestController(TestResultRepository repository) {
+    this.repository = repository;
   };
 
-  // to prevent error 405
-  @GetMapping("/run")
-  public TestResult runTestGet() {
-      return testService.runTest();
-  }
-
+  // to prevent error 405 -> use get
+  // GET → retrieve data
+  // POST → create data (like running a test)
   // POST = simulate running a test (/api/tests/run)
-  @PostMapping("/run")
-  public TestResult runResult() {
-      return testService.runTest();
+  @GetMapping("/run")
+    public TestResult runTest(@RequestParam(defaultValue = "Sample Test") String name) {
+        TestResult result = new TestResult(name, "PASSED", LocalDateTime.now());
+        repository.save(result);
+        return result;
+    }
+    // GET = view all previous test runs (/api/tests/history)
+    @GetMapping("/history")
+    public List<TestResult> getHistory() {
+        return repository.findAll();
+    }
   }
-
-  // GET = view all previous test runs (/api/tests/history)
-  @GetMapping("/history")
-  public List<TestResult> getHistory() {
-      return testService.getHistory();
-  }
-}
